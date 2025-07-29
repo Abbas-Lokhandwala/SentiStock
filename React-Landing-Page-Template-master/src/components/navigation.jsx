@@ -1,4 +1,6 @@
 import React from "react";
+import { Link } from "react-router-dom";
+
 
 export const Navigation = (props) => {
   return (
@@ -48,9 +50,7 @@ export const Navigation = (props) => {
               </a>
             </li>
             <li>
-              <a href="#contact" className="page-scroll">
-                Register/Sign In
-              </a>
+              <Link to="/auth">Register/Sign In</Link>
             </li>
           </ul>
         </div>
