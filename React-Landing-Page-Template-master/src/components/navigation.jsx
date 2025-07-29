@@ -19,9 +19,24 @@ export const Navigation = (props) => {
             <span className="icon-bar"></span>{" "}
             <span className="icon-bar"></span>{" "}
           </button>
-          <a className="navbar-brand page-scroll" href="#page-top">
-            SentiStock
-          </a>{" "}
+          <a
+            className="navbar-brand page-scroll"
+            href="#page-top"
+            style={{ display: "flex", alignItems: "center", gap: "12px" }}
+          >
+            <img
+              src="/img/logo.png"
+              alt="SentiStock Logo"
+              style={{
+                height: "48px",
+                width: "48px",
+                objectFit: "contain",
+              }}
+            />
+            <span style={{ fontWeight: "900", fontSize: "26px", letterSpacing: "1px", color: "#333" }}>
+              SENTISTOCK
+            </span>
+          </a>
         </div>
 
         <div
