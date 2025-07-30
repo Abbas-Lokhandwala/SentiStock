@@ -4,32 +4,84 @@ import { useHistory } from "react-router-dom";
 const AuthPage = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const history = useHistory();
-  const handleSubmit = (e) => {
+
+  // Form state
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    history.push("/dashboard");
+
+    if (isRegistering && password !== confirmPassword) {
+      alert("Passwords do not match");
+      return;
+    }
+
+    const endpoint = isRegistering
+      ? "https://sentistock-backend.onrender.com/api/register/"
+      : "https://sentistock-backend.onrender.com/api/login/";
+
+    const payload = {
+      username: email,
+      password: password,
+    };
+
+    try {
+      const res = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const data = await res.json();
+
+      if (res.ok && data.token) {
+        localStorage.setItem("token", data.token);
+        history.push("/dashboard");
+      } else {
+        alert(data.error || "Authentication failed.");
+      }
+    } catch (err) {
+      console.error("Error:", err);
+      alert("Server error");
+    }
   };
 
-
   return (
-    <div style={{
-      backgroundImage: 'url("/img/auth-bg.jpg")',
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      minHeight: "100vh",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      padding: "40px 20px"
-    }}>
-      <div style={{
-        background: "#fff",
-        borderRadius: "10px",
-        padding: "40px",
-        width: "100%",
-        maxWidth: "400px",
-        boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
-      }}>
-        <h2 style={{ fontWeight: "800", marginBottom: "30px", color: "#333", textAlign: "center" }}>
+    <div
+      style={{
+        backgroundImage: 'url("/img/auth-bg.jpg")',
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "40px 20px",
+      }}
+    >
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: "10px",
+          padding: "40px",
+          width: "100%",
+          maxWidth: "400px",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+        }}
+      >
+        <h2
+          style={{
+            fontWeight: "800",
+            marginBottom: "30px",
+            color: "#333",
+            textAlign: "center",
+          }}
+        >
           {isRegistering ? "Create Account" : "Welcome Back"}
         </h2>
 
@@ -37,21 +89,48 @@ const AuthPage = () => {
           {isRegistering && (
             <div className="form-group">
               <label>Full Name</label>
-              <input type="text" className="form-control" placeholder="John Doe" />
+              <input
+                type="text"
+                className="form-control"
+                placeholder="John Doe"
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+              />
             </div>
           )}
           <div className="form-group">
             <label>Email</label>
-            <input type="email" className="form-control" placeholder="you@example.com" />
+            <input
+              type="email"
+              className="form-control"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </div>
           <div className="form-group">
             <label>Password</label>
-            <input type="password" className="form-control" placeholder="••••••••" />
+            <input
+              type="password"
+              className="form-control"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
           </div>
           {isRegistering && (
             <div className="form-group">
               <label>Confirm Password</label>
-              <input type="password" className="form-control" placeholder="••••••••" />
+              <input
+                type="password"
+                className="form-control"
+                placeholder="••••••••"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
             </div>
           )}
           <button
