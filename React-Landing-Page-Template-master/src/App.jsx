@@ -7,6 +7,7 @@ import { Testimonials } from "./components/testimonials";
 import { Team } from "./components/Team";
 import { Contact } from "./components/contact";
 import AuthPage from "./components/Authpage";
+import Dashboard from "./components/Dashboard";
 import JsonData from "./data/data.json";
 import SmoothScroll from "smooth-scroll";
 import "./App.css";
@@ -37,6 +38,7 @@ const App = () => {
           </>
         </Route>
         <Route path="/auth" component={AuthPage} />
+        <Route path="/dashboard" component={Dashboard} />
       </Switch>
     </Router>
   );

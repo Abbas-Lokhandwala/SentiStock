@@ -600,6 +600,124 @@ label {
   border-bottom: 2px solid #608dfd;
 }
 
+
+.dashboard-container {
+  background-image: url('/img/bg-main.jpg');
+  background-size: cover;
+  background-position: center;
+  min-height: 100vh;
+  padding: 40px 20px;
+  color: #e3faff;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.navbar {
+  text-align: center;
+  font-size: 32px;
+  font-weight: 800;
+  color: #58d0ff;
+  margin-bottom: 5px;
+}
+
+.welcome {
+  text-align: center;
+  font-size: 18px;
+  font-weight: 400;
+  color: #f8f9fa;
+  margin-bottom: 30px;
+}
+
+.content {
+  display: flex;
+  gap: 30px;
+  flex: 1;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+
+.sidebar {
+  width: 200px;
+  background: rgba(10, 25, 47, 0.85);
+  color: #dff9ff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+}
+
+.stock-item {
+  padding: 10px;
+  margin-bottom: 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #b2d7e8;
+  transition: 0.2s;
+}
+
+.stock-item:hover,
+.stock-item.active {
+  background: linear-gradient(to right, #00bfff, #005eff);
+  color: white;
+  font-weight: bold;
+}
+
+.add-stock {
+  margin-top: auto;
+  background: linear-gradient(to right, #007cf0, #00dfd8);
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.add-stock:hover {
+  opacity: 0.9;
+}
+
+.main-view {
+  flex: 1;
+  background: rgba(10, 25, 47, 0.8);
+  padding: 25px;
+  border-radius: 12px;
+  color: #dff9ff;
+  box-shadow: 0 0 25px rgba(0, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.graph-box {
+  text-align: center;
+  font-size: 18px;
+  padding: 30px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 10px;
+  font-weight: 500;
+  color: #dff9ff;
+}
+
+.articles {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 15px;
+}
+
+.article {
+  background: rgba(255, 255, 255, 0.05);
+  padding: 15px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #e1f5ff;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.05);
+}
+
+
+
 @media (max-width: 768px) {
   #about img {
     margin: 50px 0;

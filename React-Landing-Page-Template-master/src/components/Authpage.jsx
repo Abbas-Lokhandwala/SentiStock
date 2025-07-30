@@ -1,7 +1,14 @@
 import React, { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 const AuthPage = () => {
   const [isRegistering, setIsRegistering] = useState(false);
+  const history = useHistory();
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    history.push("/dashboard");
+  };
+
 
   return (
     <div style={{
@@ -26,7 +33,7 @@ const AuthPage = () => {
           {isRegistering ? "Create Account" : "Welcome Back"}
         </h2>
 
-        <form>
+        <form onSubmit={handleSubmit}>
           {isRegistering && (
             <div className="form-group">
               <label>Full Name</label>
