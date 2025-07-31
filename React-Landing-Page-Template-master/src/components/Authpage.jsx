@@ -6,11 +6,33 @@ const AuthPage = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      history.push("/dashboard");
-    }
+    const checkToken = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) return;
+
+      try {
+        const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/", {
+          headers: {
+            Authorization: `Token ${token}`,
+          },
+        });
+
+        if (res.ok) {
+          history.push("/dashboard");
+        } else {
+          localStorage.removeItem("token");
+          localStorage.removeItem("full_name");
+        }
+      } catch (err) {
+        console.error("Token check failed:", err);
+        localStorage.removeItem("token");
+        localStorage.removeItem("full_name");
+      }
+    };
+
+    checkToken();
   }, []);
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
