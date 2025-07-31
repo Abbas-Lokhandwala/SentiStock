@@ -15,11 +15,10 @@ export default function Dashboard() {
   const [selectedStock, setSelectedStock] = useState(null);
   const [companyData, setCompanyData] = useState(null);
 
-  
   useEffect(() => {
-    const fetchWatchlist = async () => {
+    const fetchStocks = async () => {
       try {
-        const res = await fetch("https://sentistock-backend.onrender.com/api/watchlist/", {
+        const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/", {
           headers: {
             Authorization: `Token ${token}`,
           },
@@ -27,10 +26,10 @@ export default function Dashboard() {
 
         const data = await res.json();
         if (res.ok && Array.isArray(data)) {
-          const stockSymbols = data.map((item) => item.symbol);
-          setStocks(stockSymbols);
-          if (stockSymbols.length > 0) {
-            setSelectedStock(stockSymbols[0]);
+          setStocks(data);
+          if (data.length > 0) {
+            setSelectedStock(data[0].symbol);
+            setCompanyData(data[0]);
           }
         } else {
           console.error("Watchlist fetch error:", data);
@@ -40,33 +39,16 @@ export default function Dashboard() {
       }
     };
 
-    fetchWatchlist();
+    fetchStocks();
   }, []);
 
-  
   useEffect(() => {
-    if (!selectedStock) return;
+    const stock = stocks.find(s => s.symbol === selectedStock);
+    if (stock) {
+      setCompanyData(stock);
+    }
+  }, [selectedStock, stocks]);
 
-    const fetchCompanyData = async () => {
-      try {
-        const res = await fetch(`https://sentistock-backend.onrender.com/api/company/${selectedStock}/`, {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
-        });
-
-        const data = await res.json();
-        if (res.ok) setCompanyData(data);
-        else console.error("Company not found:", data);
-      } catch (err) {
-        console.error("Fetch error:", err);
-      }
-    };
-
-    fetchCompanyData();
-  }, [selectedStock]);
-
-  
   const handleAddStock = async () => {
     const newStock = prompt('Enter stock ticker:');
     if (!newStock) return;
@@ -74,7 +56,7 @@ export default function Dashboard() {
     const symbol = newStock.toUpperCase();
 
     try {
-      const res = await fetch("https://sentistock-backend.onrender.com/api/watchlist/", {
+      const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/add/", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -85,7 +67,14 @@ export default function Dashboard() {
 
       const data = await res.json();
       if (res.ok) {
-        setStocks((prev) => [...prev, symbol]);
+        setStocks((prev) => [...prev, {
+          symbol: symbol,
+          name: data.name,
+          sector: data.sector,
+          industry: data.industry,
+          description: data.description,
+          OfficialSite: data.OfficialSite
+        }]);
         setSelectedStock(symbol);
       } else {
         alert(data.error || "Failed to add stock.");
@@ -113,10 +102,10 @@ export default function Dashboard() {
               {stocks.map((stock, i) => (
                 <div
                   key={i}
-                  className={`stock-item ${selectedStock === stock ? 'active' : ''}`}
-                  onClick={() => setSelectedStock(stock)}
+                  className={`stock-item ${selectedStock === stock.symbol ? 'active' : ''}`}
+                  onClick={() => setSelectedStock(stock.symbol)}
                 >
-                  {stock}
+                  {stock.symbol}
                 </div>
               ))}
               <button className="add-stock" onClick={handleAddStock}>
@@ -131,7 +120,7 @@ export default function Dashboard() {
                 <div className="company-info" style={{ marginTop: "20px", color: "#fff" }}>
                   <h3 style={{ marginBottom: "10px" }}>
                     <a
-                      href={companyData.website}
+                      href={companyData.OfficialSite}
                       target="_blank"
                       rel="noopener noreferrer"
                       style={{ color: "#5ca9fb", textDecoration: "none" }}
