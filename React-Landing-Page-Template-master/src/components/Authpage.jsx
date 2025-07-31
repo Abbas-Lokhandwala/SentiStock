@@ -1,11 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 
 const AuthPage = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const history = useHistory();
 
-  // Form state
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      history.push("/dashboard");
+    }
+  }, []);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -23,10 +29,9 @@ const AuthPage = () => {
       ? "https://sentistock-backend.onrender.com/api/register/"
       : "https://sentistock-backend.onrender.com/api/login/";
 
-    const payload = {
-      username: email,
-      password: password,
-    };
+    const payload = isRegistering
+      ? { username: email, password: password, full_name: fullName }
+      : { username: email, password: password };
 
     try {
       const res = await fetch(endpoint, {
@@ -66,19 +71,38 @@ const AuthPage = () => {
     >
       <div
         style={{
-          background: "#fff",
+          background: "rgba(0, 0, 0, 0.75)",
+          color: "#fff",
           borderRadius: "10px",
           padding: "40px",
           width: "100%",
           maxWidth: "400px",
           boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
+          border: "1px solid rgba(255,255,255,0.1)",
+          backdropFilter: "blur(8px)",
         }}
       >
+        <img
+          src="/img/logo.ico"
+          alt="logo"
+          style={{ width: 60, margin: "0 auto 10px", display: "block" }}
+        />
+        <h1
+          style={{
+            textAlign: "center",
+            fontWeight: "bold",
+            color: "#5ca9fb",
+            marginBottom: "10px",
+          }}
+        >
+          SentiStock
+        </h1>
+
         <h2
           style={{
             fontWeight: "800",
             marginBottom: "30px",
-            color: "#333",
+            color: "#fff",
             textAlign: "center",
           }}
         >
@@ -142,10 +166,22 @@ const AuthPage = () => {
           </button>
         </form>
 
-        <p style={{ marginTop: "15px", fontSize: "14px", textAlign: "center" }}>
-          {isRegistering ? "Already have an account?" : "Don't have an account?"}{" "}
+        <p
+          style={{
+            marginTop: "15px",
+            fontSize: "14px",
+            textAlign: "center",
+          }}
+        >
+          {isRegistering
+            ? "Already have an account?"
+            : "Don't have an account?"}{" "}
           <span
-            style={{ color: "#5ca9fb", cursor: "pointer", fontWeight: "600" }}
+            style={{
+              color: "#5ca9fb",
+              cursor: "pointer",
+              fontWeight: "600",
+            }}
             onClick={() => setIsRegistering(!isRegistering)}
           >
             {isRegistering ? "Sign In" : "Register"}

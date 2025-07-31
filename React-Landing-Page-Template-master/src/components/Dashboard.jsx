@@ -5,7 +5,7 @@ const dummyArticles = [
   'Abbas Accidentally Buys 100 Shares of Nvidia Thinking It Was Netflix',
   'Mustafa Tells Everyone to Sell Apple, Then Buys It Himself an Hour Later',
   'Mohammad Tries to Short Tesla, Ends Up Shorting His Sleep Schedule Instead',
-  'Sakina Steals Abbas’s Robinhood Login and Buys Amazon Stock “for the culture”'
+  'Sakina STEALS Abbas’s Robinhood Login and Buys Amazon Stock “for the culture”'
 ];
 
 export default function Dashboard() {

@@ -716,6 +716,34 @@ label {
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.05);
 }
 
+.form-control {
+  background: rgba(255, 255, 255, 0.05);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  border-radius: 5px;
+  margin-bottom: 15px;
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-custom {
+  background: linear-gradient(to right, #5ca9fb, #6372ff);
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 0;
+  transition: 0.3s ease;
+}
+
+.btn-custom:hover {
+  background: linear-gradient(to right, #6372ff, #5ca9fb);
+  transform: scale(1.02);
+}
+
 
 
 @media (max-width: 768px) {
