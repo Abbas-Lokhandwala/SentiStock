@@ -45,6 +45,7 @@ const AuthPage = () => {
       const data = await res.json();
 
       if (res.ok && data.token) {
+        localStorage.setItem("full_name", data.full_name || "User");
         localStorage.setItem("token", data.token);
         history.push("/dashboard");
       } else {
