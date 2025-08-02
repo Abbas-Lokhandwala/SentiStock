@@ -1,21 +1,27 @@
 import React, { useState, useEffect } from 'react';
 
-const fullName = localStorage.getItem("full_name") || "User";
-const token = localStorage.getItem("token");
-
-const dummyArticles = [
-  'Abbas Accidentally Buys 100 Shares of Nvidia Thinking It Was Netflix',
-  'Mustafa Tells Everyone to Sell Apple, Then Buys It Himself an Hour Later',
-  'Mohammad Tries to Short Tesla, Ends Up Shorting His Sleep Schedule Instead',
-  'Sakina STEALS Abbas’s Robinhood Login and Buys Amazon Stock “for the culture”'
-];
-
 export default function Dashboard() {
+  const token = localStorage.getItem("token");
+  const fullName = localStorage.getItem("full_name") || "User";
+
   const [stocks, setStocks] = useState([]);
   const [selectedStock, setSelectedStock] = useState(null);
   const [companyData, setCompanyData] = useState(null);
 
+  const dummyArticles = [
+    'Abbas Accidentally Buys 100 Shares of Nvidia Thinking It Was Netflix',
+    'Mustafa Tells Everyone to Sell Apple, Then Buys It Himself an Hour Later',
+    'Mohammad Tries to Short Tesla, Ends Up Shorting His Sleep Schedule Instead',
+    'Sakina STEALS Abbas’s Robinhood Login and Buys Amazon Stock “for the culture”'
+  ];
+
   useEffect(() => {
+    if (!token) {
+      alert("Session expired. Please log in again.");
+      window.location.href = "/";
+      return;
+    }
+
     const fetchStocks = async () => {
       try {
         const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/", {
@@ -25,6 +31,7 @@ export default function Dashboard() {
         });
 
         const data = await res.json();
+
         if (res.ok && Array.isArray(data)) {
           setStocks(data);
           if (data.length > 0) {
@@ -40,7 +47,7 @@ export default function Dashboard() {
     };
 
     fetchStocks();
-  }, []);
+  }, [token]);
 
   useEffect(() => {
     const stock = stocks.find(s => s.symbol === selectedStock);
@@ -66,7 +73,12 @@ export default function Dashboard() {
       });
 
       const data = await res.json();
+
       if (res.ok) {
+        if (!data.name) {
+          alert("Stock added but company info could not be fetched.");
+        }
+
         setStocks((prev) => [...prev, {
           symbol: symbol,
           name: data.name,
@@ -81,6 +93,7 @@ export default function Dashboard() {
       }
     } catch (err) {
       console.error("Error adding stock:", err);
+      alert("Server error while adding stock.");
     }
   };
 
@@ -119,19 +132,23 @@ export default function Dashboard() {
               {companyData && (
                 <div className="company-info" style={{ marginTop: "20px", color: "#fff" }}>
                   <h3 style={{ marginBottom: "10px" }}>
-                    <a
-                      href={companyData.OfficialSite}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{ color: "#5ca9fb", textDecoration: "none" }}
-                    >
-                      {companyData.name}
-                    </a>
+                    {companyData.OfficialSite ? (
+                      <a
+                        href={companyData.OfficialSite}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: "#5ca9fb", textDecoration: "none" }}
+                      >
+                        {companyData.name || companyData.symbol}
+                      </a>
+                    ) : (
+                      companyData.name || companyData.symbol
+                    )}
                   </h3>
                   <p><strong>Symbol:</strong> {companyData.symbol}</p>
-                  <p><strong>Sector:</strong> {companyData.sector}</p>
-                  <p><strong>Industry:</strong> {companyData.industry}</p>
-                  <p style={{ marginTop: "10px" }}>{companyData.description}</p>
+                  <p><strong>Sector:</strong> {companyData.sector || "N/A"}</p>
+                  <p><strong>Industry:</strong> {companyData.industry || "N/A"}</p>
+                  <p style={{ marginTop: "10px" }}>{companyData.description || "No description available."}</p>
                 </div>
               )}
 
