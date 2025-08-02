@@ -31,8 +31,7 @@ const AuthPage = () => {
     };
 
     checkToken();
-  }, []);
-
+  }, [history]);
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -67,8 +66,8 @@ const AuthPage = () => {
       const data = await res.json();
 
       if (res.ok && data.token) {
-        localStorage.setItem("full_name", data.full_name || "User");
         localStorage.setItem("token", data.token);
+        localStorage.setItem("full_name", data.full_name || data.name || "User");
         history.push("/dashboard");
       } else {
         alert(data.error || "Authentication failed.");
