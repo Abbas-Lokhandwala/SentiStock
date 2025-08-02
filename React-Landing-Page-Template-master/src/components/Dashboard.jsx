@@ -99,7 +99,10 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <div className="navbar">SENTISTOCK</div>
+      <div className="navbar" style={{ display: "flex", alignItems: "center", gap: "10px", fontWeight: "bold", fontSize: "24px", paddingLeft: "20px", color: "#fff" }}>
+        <img src="/img/logo.ico" alt="Logo" style={{ height: "28px", marginRight: "5px" }} />
+        SENTISTOCK
+      </div>
       <div className="welcome">Welcome back, {fullName}</div>
 
       <div className="content">
