@@ -137,7 +137,11 @@ export default function Dashboard() {
                   <h3 style={{ marginBottom: "10px" }}>
                     {companyData.OfficialSite ? (
                       <a
-                        href={companyData.OfficialSite}
+                        href={
+                          companyData.OfficialSite.startsWith("http")
+                            ? companyData.OfficialSite
+                            : `https://${companyData.OfficialSite}`
+                        }
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{ color: "#5ca9fb", textDecoration: "none" }}
