@@ -147,7 +147,7 @@ const AuthPage = () => {
           <div className="form-group">
             <label>Email</label>
             <input
-              type="email"
+              type="text"
               className="form-control"
               placeholder="you@example.com"
               value={email}
