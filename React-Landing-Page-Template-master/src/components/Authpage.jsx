@@ -4,11 +4,12 @@ import { useHistory } from "react-router-dom";
 const AuthPage = () => {
   const [isRegistering, setIsRegistering] = useState(false);
   const history = useHistory();
+  const [checkedToken, setCheckedToken] = useState(false);
 
   useEffect(() => {
     const checkToken = async () => {
       const token = localStorage.getItem("token");
-      if (!token) return;
+      if (!token) return setCheckedToken(true);
 
       try {
         const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/", {
@@ -17,9 +18,7 @@ const AuthPage = () => {
           },
         });
 
-        if (res.ok) {
-          history.push("/dashboard");
-        } else {
+        if (!res.ok) {
           localStorage.removeItem("token");
           localStorage.removeItem("full_name");
         }
@@ -27,11 +26,14 @@ const AuthPage = () => {
         console.error("Token check failed:", err);
         localStorage.removeItem("token");
         localStorage.removeItem("full_name");
+      } finally {
+        setCheckedToken(true);
       }
     };
 
     checkToken();
   }, [history]);
+
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -77,6 +79,8 @@ const AuthPage = () => {
       alert("Server error");
     }
   };
+  
+  if (!checkedToken) return null;
 
   return (
     <div
@@ -149,7 +153,7 @@ const AuthPage = () => {
             <input
               type="text"
               className="form-control"
-              placeholder="you@example.com"
+              placeholder="Username or Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
