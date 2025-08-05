@@ -4,7 +4,7 @@ export default function Dashboard() {
   const token = localStorage.getItem("token");
   const fullName = localStorage.getItem("full_name") || "User";
 
-  const [stocks, setStocks] = useState([]);
+  const [watchlist, setWatchlist] = useState([]);
   const [selectedStock, setSelectedStock] = useState(null);
   const [companyData, setCompanyData] = useState(null);
 
@@ -33,10 +33,10 @@ export default function Dashboard() {
         const data = await res.json();
 
         if (res.ok && Array.isArray(data)) {
-          setStocks(data);
+          setWatchlist(data);
           if (data.length > 0) {
-            setSelectedStock(data[0].symbol);
-            setCompanyData(data[0]);
+            setSelectedStock(data[0].stock.symbol);
+            setCompanyData(data[0].stock);
           }
         } else {
           console.error("Watchlist fetch error:", data);
@@ -50,11 +50,11 @@ export default function Dashboard() {
   }, [token]);
 
   useEffect(() => {
-    const stock = stocks.find(s => s.symbol === selectedStock);
-    if (stock) {
-      setCompanyData(stock);
+    const selected = watchlist.find(w => w.stock.symbol === selectedStock);
+    if (selected) {
+      setCompanyData(selected.stock);
     }
-  }, [selectedStock, stocks]);
+  }, [selectedStock, watchlist]);
 
   const handleAddStock = async () => {
     const newStock = prompt('Enter stock ticker:');
@@ -75,19 +75,7 @@ export default function Dashboard() {
       const data = await res.json();
 
       if (res.ok) {
-        if (!data.name) {
-          alert("Stock added but company info could not be fetched.");
-        }
-
-        setStocks((prev) => [...prev, {
-          symbol: symbol,
-          name: data.name,
-          sector: data.sector,
-          industry: data.industry,
-          description: data.description,
-          OfficialSite: data.OfficialSite
-        }]);
-        setSelectedStock(symbol);
+        window.location.reload();
       } else {
         alert(data.error || "Failed to add stock.");
       }
@@ -106,7 +94,7 @@ export default function Dashboard() {
       <div className="welcome">Welcome back, {fullName}</div>
 
       <div className="content">
-        {stocks.length === 0 ? (
+        {watchlist.length === 0 ? (
           <div className="no-stocks" style={{ textAlign: "center", marginTop: "100px" }}>
             <button className="add-stock center" onClick={handleAddStock}>
               + Add to Watchlist
@@ -115,13 +103,13 @@ export default function Dashboard() {
         ) : (
           <>
             <div className="sidebar">
-              {stocks.map((stock, i) => (
+              {watchlist.map((w, i) => (
                 <div
                   key={i}
-                  className={`stock-item ${selectedStock === stock.symbol ? 'active' : ''}`}
-                  onClick={() => setSelectedStock(stock.symbol)}
+                  className={`stock-item ${selectedStock === w.stock.symbol ? 'active' : ''}`}
+                  onClick={() => setSelectedStock(w.stock.symbol)}
                 >
-                  {stock.symbol}
+                  {w.stock.symbol}
                 </div>
               ))}
               <button className="add-stock" onClick={handleAddStock}>
@@ -135,13 +123,9 @@ export default function Dashboard() {
               {companyData && (
                 <div className="company-info" style={{ marginTop: "20px", color: "#fff" }}>
                   <h3 style={{ marginBottom: "10px" }}>
-                    {companyData.OfficialSite ? (
+                    {companyData.official_site ? (
                       <a
-                        href={
-                          companyData.OfficialSite.startsWith("http")
-                            ? companyData.OfficialSite
-                            : `https://${companyData.OfficialSite}`
-                        }
+                        href={companyData.official_site.startsWith("http") ? companyData.official_site : `https://${companyData.official_site}`}
                         target="_blank"
                         rel="noopener noreferrer"
                         style={{ color: "#5ca9fb", textDecoration: "none" }}
