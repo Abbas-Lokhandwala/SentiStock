@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import StockGraph from "./StockGraph";
+
 
 export default function Dashboard() {
   const token = localStorage.getItem("token");
@@ -118,7 +120,14 @@ export default function Dashboard() {
             </div>
 
             <div className="main-view">
-              <div className="graph-box">[Graph for {selectedStock}]</div>
+              <div className="graph-box">
+                {companyData?.price_history?.length > 0 ? (
+                  <StockGraph symbol={companyData.symbol} priceHistory={companyData.price_history} />
+                ) : (
+                  <p style={{ color: "#fff" }}>No data available yet.</p>
+                )}
+              </div>
+
 
               {companyData && (
                 <div className="company-info" style={{ marginTop: "20px", color: "#fff" }}>
