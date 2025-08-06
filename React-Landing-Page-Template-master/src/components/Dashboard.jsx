@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import StockGraph from "./StockGraph";
 
-
 export default function Dashboard() {
   const token = localStorage.getItem("token");
   const fullName = localStorage.getItem("full_name") || "User";
@@ -89,10 +88,20 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <div className="navbar" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", fontWeight: "bold", fontSize: "24px", paddingLeft: "20px", color: "#fff" }}>
+      <div className="navbar" style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "10px",
+        fontWeight: "bold",
+        fontSize: "24px",
+        paddingLeft: "20px",
+        color: "#fff"
+      }}>
         <img src="/img/logo.ico" alt="Logo" style={{ height: "28px", marginRight: "5px" }} />
         SENTISTOCK
       </div>
+
       <div className="welcome">Welcome back, {fullName}</div>
 
       <div className="content">
@@ -127,7 +136,6 @@ export default function Dashboard() {
                   <p style={{ color: "#fff" }}>No data available yet.</p>
                 )}
               </div>
-
 
               {companyData && (
                 <div className="company-info" style={{ marginTop: "20px", color: "#fff" }}>
