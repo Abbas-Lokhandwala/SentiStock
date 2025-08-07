@@ -12,8 +12,7 @@ export default function Dashboard() {
   const dummyArticles = [
     'Abbas Accidentally Buys 100 Shares of Nvidia Thinking It Was Netflix',
     'Mustafa Tells Everyone to Sell Apple, Then Buys It Himself an Hour Later',
-    'Mohammad Tries to Short Tesla, Ends Up Shorting His Sleep Schedule Instead',
-    'Sakina STEALS Abbas’s Robinhood Login and Buys Amazon Stock “for the culture”'
+    'Mohammad Tries to Short Tesla, Ends Up Shorting His Sleep Schedule Instead'
   ];
 
   useEffect(() => {
