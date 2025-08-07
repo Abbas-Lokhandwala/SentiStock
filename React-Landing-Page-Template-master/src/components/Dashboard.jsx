@@ -6,14 +6,8 @@ export default function Dashboard() {
   const fullName = localStorage.getItem("full_name") || "User";
 
   const [watchlist, setWatchlist] = useState([]);
-  const [selectedStock, setSelectedStock] = useState(null);
-  const [companyData, setCompanyData] = useState(null);
-
-  const dummyArticles = [
-    'Abbas Accidentally Buys 100 Shares of Nvidia Thinking It Was Netflix',
-    'Mustafa Tells Everyone to Sell Apple, Then Buys It Himself an Hour Later',
-    'Mohammad Tries to Short Tesla, Ends Up Shorting His Sleep Schedule Instead'
-  ];
+  const [selectedSymbol, setSelectedSymbol] = useState(null);
+  const [selectedData, setSelectedData] = useState(null);
 
   useEffect(() => {
     if (!token) {
@@ -25,24 +19,18 @@ export default function Dashboard() {
     const fetchStocks = async () => {
       try {
         const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/", {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
+          headers: { Authorization: `Token ${token}` },
         });
-
         const data = await res.json();
-
         if (res.ok && Array.isArray(data)) {
           setWatchlist(data);
           if (data.length > 0) {
-            setSelectedStock(data[0].stock.symbol);
-            setCompanyData(data[0].stock);
+            setSelectedSymbol(data[0].symbol);
+            setSelectedData(data[0]);
           }
-        } else {
-          console.error("Watchlist fetch error:", data);
         }
       } catch (err) {
-        console.error("Error fetching watchlist:", err);
+        console.error("Error fetching stocks:", err);
       }
     };
 
@@ -50,17 +38,13 @@ export default function Dashboard() {
   }, [token]);
 
   useEffect(() => {
-    const selected = watchlist.find(w => w.stock.symbol === selectedStock);
-    if (selected) {
-      setCompanyData(selected.stock);
-    }
-  }, [selectedStock, watchlist]);
+    const selected = watchlist.find(w => w.symbol === selectedSymbol);
+    setSelectedData(selected);
+  }, [selectedSymbol, watchlist]);
 
   const handleAddStock = async () => {
     const newStock = prompt('Enter stock ticker:');
     if (!newStock) return;
-
-    const symbol = newStock.toUpperCase();
 
     try {
       const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/add/", {
@@ -69,35 +53,20 @@ export default function Dashboard() {
           "Content-Type": "application/json",
           Authorization: `Token ${token}`,
         },
-        body: JSON.stringify({ symbol }),
+        body: JSON.stringify({ symbol: newStock.toUpperCase() }),
       });
-
       const data = await res.json();
-
-      if (res.ok) {
-        window.location.reload();
-      } else {
-        alert(data.error || "Failed to add stock.");
-      }
+      if (res.ok) window.location.reload();
+      else alert(data.error || "Failed to add stock.");
     } catch (err) {
-      console.error("Error adding stock:", err);
       alert("Server error while adding stock.");
     }
   };
 
   return (
     <div className="dashboard-container">
-      <div className="navbar" style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: "10px",
-        fontWeight: "bold",
-        fontSize: "24px",
-        paddingLeft: "20px",
-        color: "#fff"
-      }}>
-        <img src="/img/logo.ico" alt="Logo" style={{ height: "28px", marginRight: "5px" }} />
+      <div className="navbar">
+        <img src="/img/logo.ico" alt="Logo" className="logo" />
         SENTISTOCK
       </div>
 
@@ -105,10 +74,8 @@ export default function Dashboard() {
 
       <div className="content">
         {watchlist.length === 0 ? (
-          <div className="no-stocks" style={{ textAlign: "center", marginTop: "100px" }}>
-            <button className="add-stock center" onClick={handleAddStock}>
-              + Add to Watchlist
-            </button>
+          <div className="no-stocks">
+            <button className="add-stock center" onClick={handleAddStock}>+ Add to Watchlist</button>
           </div>
         ) : (
           <>
@@ -116,54 +83,65 @@ export default function Dashboard() {
               {watchlist.map((w, i) => (
                 <div
                   key={i}
-                  className={`stock-item ${selectedStock === w.stock.symbol ? 'active' : ''}`}
-                  onClick={() => setSelectedStock(w.stock.symbol)}
+                  className={`stock-item ${selectedSymbol === w.symbol ? 'active' : ''}`}
+                  onClick={() => setSelectedSymbol(w.symbol)}
                 >
-                  {w.stock.symbol}
+                  {w.symbol}
                 </div>
               ))}
-              <button className="add-stock" onClick={handleAddStock}>
-                + Add Stock
-              </button>
+              <button className="add-stock" onClick={handleAddStock}>+ Add Stock</button>
             </div>
 
             <div className="main-view">
               <div className="graph-box">
-                {companyData?.price_history?.length > 0 ? (
-                  <StockGraph symbol={companyData.symbol} priceHistory={companyData.price_history} />
-                ) : (
-                  <p style={{ color: "#fff" }}>No data available yet.</p>
-                )}
+                {selectedData?.price_history?.length ? (
+                  <StockGraph symbol={selectedData.symbol} priceHistory={selectedData.price_history} />
+                ) : <p>No data available yet.</p>}
               </div>
 
-              {companyData && (
-                <div className="company-info" style={{ marginTop: "20px", color: "#fff" }}>
-                  <h3 style={{ marginBottom: "10px" }}>
-                    {companyData.official_site ? (
+              {selectedData && (
+                <div className="company-info">
+                  <h3>
+                    {selectedData.official_site ? (
                       <a
-                        href={companyData.official_site.startsWith("http") ? companyData.official_site : `https://${companyData.official_site}`}
+                        href={selectedData.official_site.startsWith("http") ? selectedData.official_site : `https://${selectedData.official_site}`}
                         target="_blank"
                         rel="noopener noreferrer"
-                        style={{ color: "#5ca9fb", textDecoration: "none" }}
                       >
-                        {companyData.name || companyData.symbol}
+                        {selectedData.name || selectedData.symbol}
                       </a>
                     ) : (
-                      companyData.name || companyData.symbol
+                      selectedData.name || selectedData.symbol
                     )}
                   </h3>
-                  <p><strong>Symbol:</strong> {companyData.symbol}</p>
-                  <p><strong>Sector:</strong> {companyData.sector || "N/A"}</p>
-                  <p><strong>Industry:</strong> {companyData.industry || "N/A"}</p>
-                  <p style={{ marginTop: "10px" }}>{companyData.description || "No description available."}</p>
+                  <p><strong>Symbol:</strong> {selectedData.symbol}</p>
+                  <p><strong>Sector:</strong> {selectedData.sector || "N/A"}</p>
+                  <p><strong>Industry:</strong> {selectedData.industry || "N/A"}</p>
+                  <p>{selectedData.description || "No description available."}</p>
                 </div>
               )}
 
-              <div className="articles" style={{ marginTop: "30px" }}>
-                {dummyArticles.map((text, i) => (
-                  <div key={i} className="article">{text}</div>
-                ))}
-              </div>
+              {selectedData?.articles?.length > 0 && (
+                <div className="articles">
+                  <h3>Latest News</h3>
+                  {selectedData.articles.map((a, i) => (
+                    <div
+                      key={i}
+                      className="article"
+                      style={{
+                        borderLeft: `5px solid ${a.sentiment === 'positive' ? 'limegreen' : 'red'}`,
+                        padding: '10px',
+                        marginBottom: '10px',
+                        backgroundColor: 'rgba(255,255,255,0.05)',
+                        color: '#fff'
+                      }}
+                    >
+                      <a href={a.url} target="_blank" rel="noopener noreferrer" style={{ color: '#5ca9fb', fontWeight: 'bold' }}>{a.title}</a>
+                      <div style={{ fontSize: '13px', marginTop: '4px' }}><strong>Sentiment:</strong> {a.sentiment}</div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </>
         )}

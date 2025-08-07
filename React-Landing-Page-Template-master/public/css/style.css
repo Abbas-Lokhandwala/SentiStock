@@ -744,6 +744,42 @@ label {
   transform: scale(1.02);
 }
 
+.sidebar {
+  width: 200px;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  color: #fff;
+}
+
+.stock-item {
+  padding: 8px 12px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.05);
+  margin-bottom: 6px;
+  border-radius: 5px;
+  transition: 0.2s;
+}
+.stock-item:hover {
+  background: rgba(255,255,255,0.15);
+}
+.stock-item.active {
+  background: #5ca9fb;
+  color: #fff;
+  font-weight: bold;
+}
+
+.main-view {
+  flex: 1;
+  padding: 30px;
+}
+
+.graph-box, .company-info, .articles {
+  margin-bottom: 30px;
+}
+
+.articles h3 {
+  color: #5ca9fb;
+}
 
 
 @media (max-width: 768px) {
