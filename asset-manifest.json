@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/SentiStock/static/css/main.ae42ac5f.css",
-    "main.js": "/SentiStock/static/js/main.77d9a067.js",
+    "main.js": "/SentiStock/static/js/main.54be0ce1.js",
     "index.html": "/SentiStock/index.html",
     "main.ae42ac5f.css.map": "/SentiStock/static/css/main.ae42ac5f.css.map",
-    "main.77d9a067.js.map": "/SentiStock/static/js/main.77d9a067.js.map"
+    "main.54be0ce1.js.map": "/SentiStock/static/js/main.54be0ce1.js.map"
   },
   "entrypoints": [
     "static/css/main.ae42ac5f.css",
-    "static/js/main.77d9a067.js"
+    "static/js/main.54be0ce1.js"
   ]
 }
