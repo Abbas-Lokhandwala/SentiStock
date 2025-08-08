@@ -69,7 +69,7 @@ export default function Dashboard() {
     }
   };
 
-  const logoUrl = `${process.env.PUBLIC_URL}/img/logo.ico`;
+  const logoUrl = `${process.env.PUBLIC_URL}/img/logo.png`;
 
   return (
     <div className="dashboard-container">

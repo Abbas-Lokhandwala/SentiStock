@@ -12,7 +12,7 @@ const AuthPage = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const bgUrl = `${process.env.PUBLIC_URL}/img/auth-bg.jpg`;
-  const logoUrl = `${process.env.PUBLIC_URL}/img/logo.ico`;
+  const logoUrl = `${process.env.PUBLIC_URL}/img/logo.png`;
 
   useEffect(() => {
     const checkToken = async () => {
