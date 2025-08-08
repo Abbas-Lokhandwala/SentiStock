@@ -34,7 +34,7 @@ export default function Dashboard() {
   useEffect(() => {
     if (!token) {
       alert("Session expired. Please log in again.");
-      window.location.href = "/";
+      window.location.hash = "/auth"; // or: window.location.replace("#/auth")
       return;
     }
     fetchStocks();
