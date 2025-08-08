@@ -790,6 +790,85 @@ label {
   padding: 100px 0;
 }
 
+/* Compact, styled navbar (no JS needed) */
+#menu {
+  background: #0a192f;           /* or #fff if you prefer the light theme */
+  border: 0;
+  box-shadow: 0 2px 12px rgba(0,0,0,.12);
+  padding: 8px 0;                /* tighter height */
+}
+
+#menu .nav-inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#menu .brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+#menu .brand-logo {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}
+
+#menu .brand-text {
+  font-weight: 900;
+  font-size: 20px;               /* smaller than before */
+  letter-spacing: 0.5px;
+  color: #5ca9fb;
+}
+
+#menu .nav-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0;
+}
+
+#menu .nav-links > li > a,
+#menu .nav-links > li > .auth-link {
+  color: #e9f4ff;                /* link color on dark */
+  font-size: 14px;
+  padding: 8px 10px;             /* compact click target */
+  border-radius: 6px;
+}
+
+#menu .nav-links > li > a:hover,
+#menu .nav-links > li > .auth-link:hover {
+  color: #5ca9fb;
+  background: rgba(255,255,255,.06);
+}
+
+/* optional: underline-on-hover effect like your old theme */
+#menu .nav-links > li > a.page-scroll {
+  position: relative;
+}
+#menu .nav-links > li > a.page-scroll::after {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; bottom: -4px;
+  height: 2px;
+  width: 0;
+  margin: 0 auto;
+  background: linear-gradient(90deg,#6372ff,#5ca9fb);
+  transition: width .2s ease;
+}
+#menu .nav-links > li > a.page-scroll:hover::after {
+  width: 100%;
+}
+
+/* small screens */
+@media (max-width: 768px) {
+  #menu .nav-inner { flex-wrap: wrap; gap: 8px; }
+  #menu .nav-links { width: 100%; justify-content: flex-end; flex-wrap: wrap; }
+}
+
 
 
 @media (max-width: 768px) {
