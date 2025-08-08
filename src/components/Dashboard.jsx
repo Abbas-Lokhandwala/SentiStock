@@ -69,152 +69,163 @@ export default function Dashboard() {
     }
   };
 
-  const logoUrl = `${process.env.PUBLIC_URL}/img/logo.png`;
-
   return (
-    <div className="dashboard-container">
-      <div className="navbar" style={{
-        display: 'flex',
-        alignItems: 'center',
-        padding: '10px 20px',
-        backgroundColor: '#111',
-        borderBottom: '1px solid rgba(255,255,255,0.1)'
+    <div className="dashboard-container" style={{
+      backgroundImage: "url('img/bg-main.jpg')",
+      backgroundSize: "cover",
+      backgroundPosition: "center",
+      minHeight: "100vh",
+      padding: "40px 20px",
+      fontFamily: "Segoe UI, sans-serif"
+    }}>
+      <div className="navbar" id="menu" style={{
+        backgroundColor: "#0a192f",
+        padding: "15px 30px",
+        borderBottom: "1px solid rgba(255, 255, 255, 0.05)",
+        boxShadow: "0 0 12px rgba(0, 255, 255, 0.1)",
+        marginBottom: "20px"
       }}>
-        <img src={logoUrl} alt="Logo" className="logo" style={{ height: 32, marginRight: 10 }} />
-        <span style={{ fontWeight: "bold", fontSize: "18px", color: "#5ca9fb" }}>SentiStock</span>
+        <div className="container" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          <img src="img/logo.png" alt="Logo" style={{ height: 32 }} />
+          <span style={{ fontWeight: "900", fontSize: "24px", color: "#5ca9fb" }}>SENTISTOCK</span>
+        </div>
       </div>
 
-      <div className="welcome" style={{ color: "#fff", fontSize: "20px", margin: "20px" }}>
+      <div className="welcome" style={{ color: "#fff", fontSize: "20px", margin: "20px", textAlign: "center" }}>
         Welcome back, {fullName}
       </div>
 
-      <div className="content" style={{ display: 'flex', gap: '20px', padding: '0 20px' }}>
-        {loading ? (
-          <div className="loading-screen" style={{ color: '#fff' }}>Loading your dashboard...</div>
-        ) : watchlist.length === 0 ? (
-          <div className="no-stocks" style={{ color: '#fff' }}>
-            <button className="add-stock center" onClick={handleAddStock}>+ Add to Watchlist</button>
-          </div>
-        ) : (
-          <>
-            <div className="sidebar" style={{ minWidth: '140px', paddingTop: 10 }}>
-              {watchlist.map((w, i) => (
-                <div
-                  key={i}
-                  className={`stock-item ${selectedSymbol === w.symbol ? 'active' : ''}`}
-                  onClick={() => setSelectedSymbol(w.symbol)}
+      {loading ? (
+        <div className="loading-screen" style={{ color: '#5ca9fb', fontSize: '20px', textAlign: 'center', padding: '100px 0' }}>
+          Loading your dashboard...
+        </div>
+      ) : (
+        <div className="content" style={{ display: 'flex', gap: '20px', padding: '0 20px' }}>
+          {watchlist.length === 0 ? (
+            <div className="no-stocks" style={{ color: '#fff' }}>
+              <button className="add-stock center" onClick={handleAddStock}>+ Add to Watchlist</button>
+            </div>
+          ) : (
+            <>
+              <div className="sidebar" style={{ minWidth: '140px', paddingTop: 10 }}>
+                {watchlist.map((w, i) => (
+                  <div
+                    key={i}
+                    className={`stock-item ${selectedSymbol === w.symbol ? 'active' : ''}`}
+                    onClick={() => setSelectedSymbol(w.symbol)}
+                    style={{
+                      padding: '8px 12px',
+                      marginBottom: '8px',
+                      backgroundColor: selectedSymbol === w.symbol ? '#5ca9fb' : '#222',
+                      color: selectedSymbol === w.symbol ? '#000' : '#fff',
+                      borderRadius: '6px',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    {w.symbol}
+                  </div>
+                ))}
+                <button
+                  className="add-stock"
+                  onClick={handleAddStock}
                   style={{
-                    padding: '8px 12px',
-                    marginBottom: '8px',
-                    backgroundColor: selectedSymbol === w.symbol ? '#5ca9fb' : '#222',
-                    color: selectedSymbol === w.symbol ? '#000' : '#fff',
+                    marginTop: '10px',
+                    width: '100%',
+                    padding: '8px',
+                    backgroundColor: '#5ca9fb',
+                    color: '#000',
+                    border: 'none',
                     borderRadius: '6px',
                     cursor: 'pointer'
                   }}
                 >
-                  {w.symbol}
-                </div>
-              ))}
-              <button
-                className="add-stock"
-                onClick={handleAddStock}
-                style={{
-                  marginTop: '10px',
-                  width: '100%',
-                  padding: '8px',
-                  backgroundColor: '#5ca9fb',
-                  color: '#000',
-                  border: 'none',
-                  borderRadius: '6px',
-                  cursor: 'pointer'
-                }}
-              >
-                + Add Stock
-              </button>
-            </div>
-
-            <div className="main-view" style={{ flex: 1 }}>
-              <div className="graph-box">
-                {selectedData?.price_history?.length ? (
-                  <StockGraph symbol={selectedData.symbol} priceHistory={selectedData.price_history} />
-                ) : <p style={{ color: '#fff' }}>No data available yet.</p>}
+                  + Add Stock
+                </button>
               </div>
 
-              {selectedData && (
-                <div className="company-info" style={{ marginTop: '20px', color: '#fff' }}>
-                  <h3>
-                    {selectedData.official_site ? (
-                      <a
-                        href={selectedData.official_site.startsWith("http") ? selectedData.official_site : `https://${selectedData.official_site}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: "#5ca9fb", textDecoration: "none" }}
-                      >
-                        {selectedData.name || selectedData.symbol}
-                      </a>
-                    ) : (
-                      selectedData.name || selectedData.symbol
-                    )}
-                  </h3>
-                  <p><strong>Symbol:</strong> {selectedData.symbol}</p>
-                  <p><strong>Sector:</strong> {selectedData.sector || "N/A"}</p>
-                  <p><strong>Industry:</strong> {selectedData.industry || "N/A"}</p>
-                  <p>{selectedData.description || "No description available."}</p>
+              <div className="main-view" style={{ flex: 1 }}>
+                <div className="graph-box">
+                  {selectedData?.price_history?.length ? (
+                    <StockGraph symbol={selectedData.symbol} priceHistory={selectedData.price_history} />
+                  ) : <p style={{ color: '#fff' }}>No data available yet.</p>}
                 </div>
-              )}
 
-              {selectedData?.ai_opinion && (
-                <div
-                  className="ai-opinion-box"
-                  style={{
-                    backgroundColor: 'rgba(255,255,255,0.05)',
-                    padding: '15px',
-                    marginTop: '20px',
-                    borderLeft: `5px solid ${selectedData.ai_opinion.sentiment === 'positive' ? 'limegreen' : 'red'}`,
-                    color: '#fff',
-                    borderRadius: '8px'
-                  }}
-                >
-                  <h3 style={{ marginBottom: '10px', color: '#5ca9fb' }}>AI Based Analysis</h3>
-                  <div style={{ fontSize: '15px' }}>
-                    <strong>Sentiment:</strong>{' '}
-                    <span style={{ color: selectedData.ai_opinion.sentiment === 'positive' ? 'limegreen' : 'red' }}>
-                      {selectedData.ai_opinion.sentiment}
-                    </span>
+                {selectedData && (
+                  <div className="company-info" style={{ marginTop: '20px', color: '#fff' }}>
+                    <h3>
+                      {selectedData.official_site ? (
+                        <a
+                          href={selectedData.official_site.startsWith("http") ? selectedData.official_site : `https://${selectedData.official_site}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          style={{ color: "#5ca9fb", textDecoration: "none" }}
+                        >
+                          {selectedData.name || selectedData.symbol}
+                        </a>
+                      ) : (
+                        selectedData.name || selectedData.symbol
+                      )}
+                    </h3>
+                    <p><strong>Symbol:</strong> {selectedData.symbol}</p>
+                    <p><strong>Sector:</strong> {selectedData.sector || "N/A"}</p>
+                    <p><strong>Industry:</strong> {selectedData.industry || "N/A"}</p>
+                    <p>{selectedData.description || "No description available."}</p>
                   </div>
-                  <p style={{ marginTop: '8px' }}>{selectedData.ai_opinion.text}</p>
-                </div>
-              )}
+                )}
 
-              {selectedData?.articles?.length > 0 && (
-                <div className="articles" style={{ marginTop: '20px' }}>
-                  <h3 style={{ color: '#5ca9fb' }}>Latest News</h3>
-                  {selectedData.articles.map((a, i) => (
-                    <div
-                      key={i}
-                      className="article"
-                      style={{
-                        borderLeft: `5px solid ${a.sentiment === 'positive' ? 'limegreen' : 'red'}`,
-                        padding: '10px',
-                        marginBottom: '10px',
-                        backgroundColor: 'rgba(255,255,255,0.05)',
-                        color: '#fff'
-                      }}
-                    >
-                      <a href={a.url} target="_blank" rel="noopener noreferrer" style={{ color: '#5ca9fb', fontWeight: 'bold' }}>
-                        {a.title}
-                      </a>
-                      <div style={{ fontSize: '13px', marginTop: '4px' }}>
-                        <strong>Sentiment:</strong> {a.sentiment}
-                      </div>
+                {selectedData?.ai_opinion && (
+                  <div
+                    className="ai-opinion-box"
+                    style={{
+                      backgroundColor: 'rgba(255,255,255,0.05)',
+                      padding: '15px',
+                      marginTop: '20px',
+                      borderLeft: `5px solid ${selectedData.ai_opinion.sentiment === 'positive' ? 'limegreen' : 'red'}`,
+                      color: '#fff',
+                      borderRadius: '8px'
+                    }}
+                  >
+                    <h3 style={{ marginBottom: '10px', color: '#5ca9fb' }}>AI Based Analysis</h3>
+                    <div style={{ fontSize: '15px' }}>
+                      <strong>Sentiment:</strong>{' '}
+                      <span style={{ color: selectedData.ai_opinion.sentiment === 'positive' ? 'limegreen' : 'red' }}>
+                        {selectedData.ai_opinion.sentiment}
+                      </span>
                     </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </>
-        )}
-      </div>
+                    <p style={{ marginTop: '8px' }}>{selectedData.ai_opinion.text}</p>
+                  </div>
+                )}
+
+                {selectedData?.articles?.length > 0 && (
+                  <div className="articles" style={{ marginTop: '20px' }}>
+                    <h3 style={{ color: '#5ca9fb' }}>Latest News</h3>
+                    {selectedData.articles.map((a, i) => (
+                      <div
+                        key={i}
+                        className="article"
+                        style={{
+                          borderLeft: `5px solid ${a.sentiment === 'positive' ? 'limegreen' : 'red'}`,
+                          padding: '10px',
+                          marginBottom: '10px',
+                          backgroundColor: 'rgba(255,255,255,0.05)',
+                          color: '#fff'
+                        }}
+                      >
+                        <a href={a.url} target="_blank" rel="noopener noreferrer" style={{ color: '#5ca9fb', fontWeight: 'bold' }}>
+                          {a.title}
+                        </a>
+                        <div style={{ fontSize: '13px', marginTop: '4px' }}>
+                          <strong>Sentiment:</strong> {a.sentiment}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }
