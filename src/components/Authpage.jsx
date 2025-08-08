@@ -34,7 +34,6 @@ const AuthPage = () => {
     checkToken();
   }, [history]);
 
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [fullName, setFullName] = useState("");
@@ -79,13 +78,16 @@ const AuthPage = () => {
       alert("Server error");
     }
   };
-  
+
   if (!checkedToken) return null;
+
+  const bgUrl = `${process.env.PUBLIC_URL}/img/auth-bg.jpg`;
+  const logoUrl = `${process.env.PUBLIC_URL}/img/logo.ico`;
 
   return (
     <div
       style={{
-        backgroundImage: 'url("/img/auth-bg.jpg")',
+        backgroundImage: `url(${bgUrl})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         minHeight: "100vh",
@@ -109,7 +111,7 @@ const AuthPage = () => {
         }}
       >
         <img
-          src="/img/logo.ico"
+          src={logoUrl}
           alt="logo"
           style={{ width: 60, margin: "0 auto 10px", display: "block" }}
         />

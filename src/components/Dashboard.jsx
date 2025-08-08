@@ -70,11 +70,13 @@ export default function Dashboard() {
     }
   };
 
+  const logoUrl = `${process.env.PUBLIC_URL}/img/logo.ico`;
+
   return (
     <div className="dashboard-container">
       <div className="navbar">
-        <img src="/img/logo.ico" alt="Logo" className="logo" />
-        SENTISTOCK
+        <img src={logoUrl} alt="Logo" className="logo" style={{ height: 32, marginRight: 10 }} />
+        <span style={{ fontWeight: "bold", fontSize: "18px", color: "#5ca9fb" }}>SENTISTOCK</span>
       </div>
 
       <div className="welcome">Welcome back, {fullName}</div>
@@ -154,8 +156,8 @@ export default function Dashboard() {
               )}
 
               {selectedData?.articles?.length > 0 && (
-                <div className="articles">
-                  <h3>Latest News</h3>
+                <div className="articles" style={{ marginTop: '20px' }}>
+                  <h3 style={{ color: '#5ca9fb' }}>Latest News</h3>
                   {selectedData.articles.map((a, i) => (
                     <div
                       key={i}
@@ -168,8 +170,12 @@ export default function Dashboard() {
                         color: '#fff'
                       }}
                     >
-                      <a href={a.url} target="_blank" rel="noopener noreferrer" style={{ color: '#5ca9fb', fontWeight: 'bold' }}>{a.title}</a>
-                      <div style={{ fontSize: '13px', marginTop: '4px' }}><strong>Sentiment:</strong> {a.sentiment}</div>
+                      <a href={a.url} target="_blank" rel="noopener noreferrer" style={{ color: '#5ca9fb', fontWeight: 'bold' }}>
+                        {a.title}
+                      </a>
+                      <div style={{ fontSize: '13px', marginTop: '4px' }}>
+                        <strong>Sentiment:</strong> {a.sentiment}
+                      </div>
                     </div>
                   ))}
                 </div>
