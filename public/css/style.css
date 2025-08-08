@@ -603,7 +603,7 @@ label {
 
 
 .dashboard-container {
-  background-image: url('/img/bg-main.jpg');
+  background-image: url('img/bg-main.jpg');
   background-size: cover;
   background-position: center;
   min-height: 100vh;
@@ -611,6 +611,7 @@ label {
   color: #e3faff;
   font-family: 'Segoe UI', sans-serif;
 }
+
 
 .navbar {
   text-align: center;
