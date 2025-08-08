@@ -9,10 +9,13 @@ import { Team } from "./components/Team";
 import { Contact } from "./components/contact";
 import AuthPage from "./components/Authpage";
 import Dashboard from "./components/Dashboard";
+
 import JsonData from "./data/data.json";
 import SmoothScroll from "smooth-scroll";
+
 import "./App.css";
 
+// Smooth scrolling for anchor links
 export const scroll = new SmoothScroll('a[href*="#"]', {
   speed: 1000,
   speedAsDuration: true,
@@ -25,21 +28,24 @@ const App = () => {
     setLandingPageData(JsonData);
   }, []);
 
+  const LandingPage = () => (
+    <>
+      <Navigation />
+      <Header data={landingPageData.Header} />
+      <About data={landingPageData.About} />
+      <Testimonials data={landingPageData.Testimonials} />
+      <Team data={landingPageData.Team} />
+      <Contact data={landingPageData.Contact} />
+    </>
+  );
+
   return (
     <Router>
       <Switch>
-        <Route exact path="/">
-          <>
-            <Navigation />
-            <Header data={landingPageData.Header} />
-            <About data={landingPageData.About} />
-            <Testimonials data={landingPageData.Testimonials} />
-            <Team data={landingPageData.Team} />
-            <Contact data={landingPageData.Contact} />
-          </>
-        </Route>
+        <Route exact path="/" component={LandingPage} />
         <Route path="/auth" component={AuthPage} />
         <Route path="/dashboard" component={Dashboard} />
+        <Route render={() => <h2 style={{ textAlign: "center" }}>404 - Page Not Found</h2>} />
       </Switch>
     </Router>
   );
