@@ -120,6 +120,29 @@ export default function Dashboard() {
                   <p>{selectedData.description || "No description available."}</p>
                 </div>
               )}
+              
+              {selectedData?.ai_opinion && (
+                <div
+                  className="ai-opinion-box"
+                  style={{
+                    backgroundColor: 'rgba(255,255,255,0.05)',
+                    padding: '15px',
+                    marginTop: '20px',
+                    borderLeft: `5px solid ${selectedData.ai_sentiment === 'positive' ? 'limegreen' : 'red'}`,
+                    color: '#fff',
+                    borderRadius: '8px'
+                  }}
+                >
+                  <h3 style={{ margin: 0, color: '#5ca9fb', marginBottom: '10px' }}>AI Based Analysis</h3>
+                  <div style={{ fontSize: '15px' }}>
+                    <strong>Sentiment:</strong>{' '}
+                    <span style={{ color: selectedData.ai_sentiment === 'positive' ? 'limegreen' : 'red' }}>
+                      {selectedData.ai_sentiment}
+                    </span>
+                  </div>
+                  <p style={{ marginTop: '8px' }}>{selectedData.ai_opinion}</p>
+                </div>
+              )}
 
               {selectedData?.articles?.length > 0 && (
                 <div className="articles">
