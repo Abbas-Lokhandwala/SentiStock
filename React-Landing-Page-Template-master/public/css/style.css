@@ -782,6 +782,14 @@ label {
   color: #5ca9fb;
 }
 
+.loading-screen {
+  font-size: 20px;
+  color: #5ca9fb;
+  text-align: center;
+  padding: 100px 0;
+}
+
+
 
 @media (max-width: 768px) {
   #about img {

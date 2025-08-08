@@ -8,6 +8,28 @@ export default function Dashboard() {
   const [watchlist, setWatchlist] = useState([]);
   const [selectedSymbol, setSelectedSymbol] = useState(null);
   const [selectedData, setSelectedData] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const fetchStocks = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/", {
+        headers: { Authorization: `Token ${token}` },
+      });
+      const data = await res.json();
+      if (res.ok && Array.isArray(data)) {
+        setWatchlist(data);
+        if (data.length > 0) {
+          setSelectedSymbol(data[0].symbol);
+          setSelectedData(data[0]);
+        }
+      }
+    } catch (err) {
+      console.error("Error fetching stocks:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
     if (!token) {
@@ -15,24 +37,6 @@ export default function Dashboard() {
       window.location.href = "/";
       return;
     }
-
-    const fetchStocks = async () => {
-      try {
-        const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/", {
-          headers: { Authorization: `Token ${token}` },
-        });
-        const data = await res.json();
-        if (res.ok && Array.isArray(data)) {
-          setWatchlist(data);
-          if (data.length > 0) {
-            setSelectedSymbol(data[0].symbol);
-            setSelectedData(data[0]);
-          }
-        }
-      } catch (err) {
-        console.error("Error fetching stocks:", err);
-      }
-    };
 
     fetchStocks();
   }, [token]);
@@ -56,8 +60,11 @@ export default function Dashboard() {
         body: JSON.stringify({ symbol: newStock.toUpperCase() }),
       });
       const data = await res.json();
-      if (res.ok) window.location.reload();
-      else alert(data.error || "Failed to add stock.");
+      if (res.ok) {
+        await fetchStocks();
+      } else {
+        alert(data.error || "Failed to add stock.");
+      }
     } catch (err) {
       alert("Server error while adding stock.");
     }
@@ -73,7 +80,9 @@ export default function Dashboard() {
       <div className="welcome">Welcome back, {fullName}</div>
 
       <div className="content">
-        {watchlist.length === 0 ? (
+        {loading ? (
+          <div className="loading-screen">Loading your dashboard...</div>
+        ) : watchlist.length === 0 ? (
           <div className="no-stocks">
             <button className="add-stock center" onClick={handleAddStock}>+ Add to Watchlist</button>
           </div>
