@@ -120,7 +120,7 @@ export default function Dashboard() {
                   <p>{selectedData.description || "No description available."}</p>
                 </div>
               )}
-              
+
               {selectedData?.ai_opinion && (
                 <div
                   className="ai-opinion-box"
@@ -128,19 +128,19 @@ export default function Dashboard() {
                     backgroundColor: 'rgba(255,255,255,0.05)',
                     padding: '15px',
                     marginTop: '20px',
-                    borderLeft: `5px solid ${selectedData.ai_sentiment === 'positive' ? 'limegreen' : 'red'}`,
+                    borderLeft: `5px solid ${selectedData.ai_opinion.sentiment === 'positive' ? 'limegreen' : 'red'}`,
                     color: '#fff',
                     borderRadius: '8px'
                   }}
                 >
-                  <h3 style={{ margin: 0, color: '#5ca9fb', marginBottom: '10px' }}>AI Based Analysis</h3>
+                  <h3 style={{ marginBottom: '10px', color: '#5ca9fb' }}>AI Based Analysis</h3>
                   <div style={{ fontSize: '15px' }}>
                     <strong>Sentiment:</strong>{' '}
-                    <span style={{ color: selectedData.ai_sentiment === 'positive' ? 'limegreen' : 'red' }}>
-                      {selectedData.ai_sentiment}
+                    <span style={{ color: selectedData.ai_opinion.sentiment === 'positive' ? 'limegreen' : 'red' }}>
+                      {selectedData.ai_opinion.sentiment}
                     </span>
                   </div>
-                  <p style={{ marginTop: '8px' }}>{selectedData.ai_opinion}</p>
+                  <p style={{ marginTop: '8px' }}>{selectedData.ai_opinion.text}</p>
                 </div>
               )}
 
