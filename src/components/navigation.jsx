@@ -25,7 +25,7 @@ export const Navigation = (props) => {
             style={{ display: "flex", alignItems: "center", gap: "12px" }}
           >
             <img
-              src="/img/logo.png"
+              src={`${process.env.PUBLIC_URL}/img/logo.png`}
               alt="SentiStock Logo"
               style={{
                 height: "48px",
