@@ -6,6 +6,14 @@ const AuthPage = () => {
   const history = useHistory();
   const [checkedToken, setCheckedToken] = useState(false);
 
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [fullName, setFullName] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const bgUrl = `${process.env.PUBLIC_URL}/img/auth-bg.jpg`;
+  const logoUrl = `${process.env.PUBLIC_URL}/img/logo.ico`;
+
   useEffect(() => {
     const checkToken = async () => {
       const token = localStorage.getItem("token");
@@ -13,9 +21,7 @@ const AuthPage = () => {
 
       try {
         const res = await fetch("https://sentistock-backend.onrender.com/api/stocks/", {
-          headers: {
-            Authorization: `Token ${token}`,
-          },
+          headers: { Authorization: `Token ${token}` },
         });
 
         if (!res.ok) {
@@ -34,11 +40,6 @@ const AuthPage = () => {
     checkToken();
   }, [history]);
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -52,15 +53,13 @@ const AuthPage = () => {
       : "https://sentistock-backend.onrender.com/api/login/";
 
     const payload = isRegistering
-      ? { username: email, password: password, full_name: fullName }
-      : { username: email, password: password };
+      ? { username: email, password, full_name: fullName }
+      : { username: email, password };
 
     try {
       const res = await fetch(endpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
 
@@ -80,9 +79,6 @@ const AuthPage = () => {
   };
 
   if (!checkedToken) return null;
-
-  const bgUrl = `${process.env.PUBLIC_URL}/img/auth-bg.jpg`;
-  const logoUrl = `${process.env.PUBLIC_URL}/img/logo.ico`;
 
   return (
     <div
@@ -112,7 +108,7 @@ const AuthPage = () => {
       >
         <img
           src={logoUrl}
-          alt="logo"
+          alt="SentiStock Logo"
           style={{ width: 60, margin: "0 auto 10px", display: "block" }}
         />
         <h1
@@ -140,48 +136,56 @@ const AuthPage = () => {
         <form onSubmit={handleSubmit}>
           {isRegistering && (
             <div className="form-group">
-              <label>Full Name</label>
+              <label htmlFor="fullName">Full Name</label>
               <input
+                id="fullName"
                 type="text"
                 className="form-control"
                 placeholder="John Doe"
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
+                autoComplete="name"
               />
             </div>
           )}
           <div className="form-group">
-            <label>Email</label>
+            <label htmlFor="email">Email</label>
             <input
+              id="email"
               type="text"
               className="form-control"
               placeholder="Username or Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              autoComplete="username"
             />
           </div>
           <div className="form-group">
-            <label>Password</label>
+            <label htmlFor="password">Password</label>
             <input
+              id="password"
               type="password"
               className="form-control"
               placeholder="••••••••"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              autoComplete={isRegistering ? "new-password" : "current-password"}
             />
           </div>
           {isRegistering && (
             <div className="form-group">
-              <label>Confirm Password</label>
+              <label htmlFor="confirmPassword">Confirm Password</label>
               <input
+                id="confirmPassword"
                 type="password"
                 className="form-control"
                 placeholder="••••••••"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
+                autoComplete="new-password"
               />
             </div>
           )}
@@ -194,13 +198,7 @@ const AuthPage = () => {
           </button>
         </form>
 
-        <p
-          style={{
-            marginTop: "15px",
-            fontSize: "14px",
-            textAlign: "center",
-          }}
-        >
+        <p style={{ marginTop: "15px", fontSize: "14px", textAlign: "center" }}>
           {isRegistering
             ? "Already have an account?"
             : "Don't have an account?"}{" "}

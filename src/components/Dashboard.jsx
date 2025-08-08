@@ -37,7 +37,6 @@ export default function Dashboard() {
       window.location.href = "/";
       return;
     }
-
     fetchStocks();
   }, [token]);
 
@@ -74,50 +73,82 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-container">
-      <div className="navbar">
+      <div className="navbar" style={{
+        display: 'flex',
+        alignItems: 'center',
+        padding: '10px 20px',
+        backgroundColor: '#111',
+        borderBottom: '1px solid rgba(255,255,255,0.1)'
+      }}>
         <img src={logoUrl} alt="Logo" className="logo" style={{ height: 32, marginRight: 10 }} />
-        <span style={{ fontWeight: "bold", fontSize: "18px", color: "#5ca9fb" }}>SENTISTOCK</span>
+        <span style={{ fontWeight: "bold", fontSize: "18px", color: "#5ca9fb" }}>SentiStock</span>
       </div>
 
-      <div className="welcome">Welcome back, {fullName}</div>
+      <div className="welcome" style={{ color: "#fff", fontSize: "20px", margin: "20px" }}>
+        Welcome back, {fullName}
+      </div>
 
-      <div className="content">
+      <div className="content" style={{ display: 'flex', gap: '20px', padding: '0 20px' }}>
         {loading ? (
-          <div className="loading-screen">Loading your dashboard...</div>
+          <div className="loading-screen" style={{ color: '#fff' }}>Loading your dashboard...</div>
         ) : watchlist.length === 0 ? (
-          <div className="no-stocks">
+          <div className="no-stocks" style={{ color: '#fff' }}>
             <button className="add-stock center" onClick={handleAddStock}>+ Add to Watchlist</button>
           </div>
         ) : (
           <>
-            <div className="sidebar">
+            <div className="sidebar" style={{ minWidth: '140px', paddingTop: 10 }}>
               {watchlist.map((w, i) => (
                 <div
                   key={i}
                   className={`stock-item ${selectedSymbol === w.symbol ? 'active' : ''}`}
                   onClick={() => setSelectedSymbol(w.symbol)}
+                  style={{
+                    padding: '8px 12px',
+                    marginBottom: '8px',
+                    backgroundColor: selectedSymbol === w.symbol ? '#5ca9fb' : '#222',
+                    color: selectedSymbol === w.symbol ? '#000' : '#fff',
+                    borderRadius: '6px',
+                    cursor: 'pointer'
+                  }}
                 >
                   {w.symbol}
                 </div>
               ))}
-              <button className="add-stock" onClick={handleAddStock}>+ Add Stock</button>
+              <button
+                className="add-stock"
+                onClick={handleAddStock}
+                style={{
+                  marginTop: '10px',
+                  width: '100%',
+                  padding: '8px',
+                  backgroundColor: '#5ca9fb',
+                  color: '#000',
+                  border: 'none',
+                  borderRadius: '6px',
+                  cursor: 'pointer'
+                }}
+              >
+                + Add Stock
+              </button>
             </div>
 
-            <div className="main-view">
+            <div className="main-view" style={{ flex: 1 }}>
               <div className="graph-box">
                 {selectedData?.price_history?.length ? (
                   <StockGraph symbol={selectedData.symbol} priceHistory={selectedData.price_history} />
-                ) : <p>No data available yet.</p>}
+                ) : <p style={{ color: '#fff' }}>No data available yet.</p>}
               </div>
 
               {selectedData && (
-                <div className="company-info">
+                <div className="company-info" style={{ marginTop: '20px', color: '#fff' }}>
                   <h3>
                     {selectedData.official_site ? (
                       <a
                         href={selectedData.official_site.startsWith("http") ? selectedData.official_site : `https://${selectedData.official_site}`}
                         target="_blank"
                         rel="noopener noreferrer"
+                        style={{ color: "#5ca9fb", textDecoration: "none" }}
                       >
                         {selectedData.name || selectedData.symbol}
                       </a>
