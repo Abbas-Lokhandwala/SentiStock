@@ -5,7 +5,6 @@ import { Navigation } from "./components/navigation";
 import { Header } from "./components/header";
 import { About } from "./components/about";
 import { Testimonials } from "./components/testimonials";
-import { Team } from "./components/Team";
 import { Contact } from "./components/contact";
 import AuthPage from "./components/Authpage";
 import Dashboard from "./components/Dashboard";
@@ -34,7 +33,6 @@ const App = () => {
       <Header data={landingPageData.Header} />
       <About data={landingPageData.About} />
       <Testimonials data={landingPageData.Testimonials} />
-      <Team data={landingPageData.Team} />
       <Contact data={landingPageData.Contact} />
     </>
   );
